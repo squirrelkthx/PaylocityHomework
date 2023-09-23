@@ -1,7 +1,7 @@
 import { calcPaycheck } from "./cost-calcs";
 
 describe('testing cost-calcs file', () => {
-    test('calcPaycheck should return expected values', () => {
+    test('calcPaycheck should return expected values based on inputs', () => {
       expect(calcPaycheck(30000, 2, 30)).toBe(138.46153846153845);
       expect(calcPaycheck(40000, 0, 30)).toBe(1076.923076923077);
       expect(calcPaycheck(50000, 0, 60)).toBe(1369.2307692307693);
