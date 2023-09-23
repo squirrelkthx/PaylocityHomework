@@ -23,7 +23,9 @@ Additional notes:
 To run PaymentCalc tests: From the base UI directory (./PaylocityBenefitsUi/paylocity-benefits-ui/) you can run `npm run test cost-calcs`
 Cost Calculation tests can be found in `./PaylocityBenefitsUi/paylocity-benefits-ui/src/Utils/cost-calcs.test.ts`
 
-#### ORIGINAL README BELOW ####
+---
+
+# ORIGINAL README BELOW #
 
 # What is this?
 
