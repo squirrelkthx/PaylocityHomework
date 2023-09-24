@@ -12,8 +12,12 @@ Initial decisions:
 
 Additional notes:
 - The provided API application required the install of an older version of the SDK
-- I focused on presneting the data being exposed by the provided endpoints, and small alterations to what the controllers were setup to expose; work could have been done to flesh out missing REST calls (push/post/delete), I did not focus on this, as it was not part of the requirements
+- ~~I focused on presneting the data being exposed by the provided endpoints, and small alterations to what the controllers were setup to expose; work could have been done to flesh out missing REST calls (put/post/delete), I did not focus on this, as it was not part of the requirements~~
+- Update on put/post/delete calls: decided to implement these, as it seemed heavily implied, although not explicit in the requirements.
 
+# Prerequisites
+1. install npm (https://nodejs.org/en/download)
+1. install .net core SDK v6 (latest is v7, the API seed project requires v6)
 
 # How to run the app #
 1. From the base directory (./PaylocityHomework) you can Run `.NET Core Launch (Web)` to start the API (https://localhost:7124/swagger)

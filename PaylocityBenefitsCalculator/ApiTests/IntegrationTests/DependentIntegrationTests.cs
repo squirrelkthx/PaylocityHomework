@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Api.Dtos.Dependent;
 using Api.Models;
@@ -87,6 +90,28 @@ public class DependentIntegrationTests : IntegrationTest
     {
         var response = await HttpClient.GetAsync($"/api/v1/dependents/{int.MinValue}");
         await response.ShouldReturn(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    //task: make test pass
+    //resolution: return NotFound if the GetDependent returns null
+    public async Task WhenAddingNewChildDependent_ShouldReturnOKWithTrue()
+    {
+        Dependent dependent = new Dependent() { EmployeeId = 1, FirstName = "new-dep", LastName = "end-dent", DateOfBirth = new DateTime(1976, 11, 12), Relationship = Relationship.Child };
+        HttpContent httpContent = new StringContent(JsonSerializer.Serialize(dependent), Encoding.UTF8, "application/json");
+        var response = await HttpClient.PostAsync($"/api/v1/dependents/", httpContent);
+        await response.ShouldReturn(HttpStatusCode.OK, true);
+    }
+
+    [Fact]
+    //task: make test pass
+    //resolution: return NotFound if the GetDependent returns null
+    public async Task WhenAddingNewSpouseDependent_ShouldReturnOKWithFalse()
+    {
+        Dependent dependent = new Dependent() { EmployeeId = 3, FirstName = "new-dep", LastName = "end-dent", DateOfBirth = new DateTime(1976, 11, 12), Relationship = Relationship.Spouse };
+        HttpContent httpContent = new StringContent(JsonSerializer.Serialize(dependent), Encoding.UTF8, "application/json");
+        var response = await HttpClient.PostAsync($"/api/v1/dependents/", httpContent);
+        await response.ShouldReturn(HttpStatusCode.OK, false);
     }
 }
 

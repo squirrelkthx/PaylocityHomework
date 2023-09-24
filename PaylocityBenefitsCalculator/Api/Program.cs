@@ -25,8 +25,8 @@ builder.Services.AddCors(options =>
         policy => { policy.WithOrigins("http://localhost:3000", "http://localhost"); });
 });
 
-builder.Services.AddScoped<IEmployeeProvider, MockEmployeeProvider>(); // return mock provider, would be swapped for a dev/production provider in actual implementation
-builder.Services.AddScoped<IDependentProvider, MockDependentProvider>(); // return mock provider, would be swapped for a dev/production provider in actual implementation
+builder.Services.AddSingleton<IEmployeeProvider, MockEmployeeProvider>(); // return mock provider, would be swapped for a dev/production provider in actual implementation
+builder.Services.AddSingleton<IDependentProvider, MockDependentProvider>(); // return mock provider, would be swapped for a dev/production provider in actual implementation
 
 var app = builder.Build();
 

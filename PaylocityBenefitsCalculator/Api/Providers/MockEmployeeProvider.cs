@@ -74,6 +74,37 @@ public class MockEmployeeProvider : IEmployeeProvider
             }
         };
 
+    public GetEmployeeDto AddEmployee(Employee employee)
+    {
+        List<int> listOfIds = employees.Select(x => x.Id).ToList();
+        listOfIds.Sort();
+        int lastId = listOfIds.LastOrDefault();
+
+        // these mappings could be moved to a constructor
+        GetEmployeeDto employeeToAdd = new GetEmployeeDto()
+        {
+            Id = lastId + 1, // Id's could be refactored to GUID
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
+            DateOfBirth = employee.DateOfBirth,
+            ProfileUrl = employee.ProfileUrl
+        };
+        employees.Add(employeeToAdd);
+
+        return employeeToAdd;
+    }
+
+    public bool DeleteEmployee(int id)
+    {
+        GetEmployeeDto? employeeToRemove = employees.Find(x => x.Id == id);
+        if (employeeToRemove == null)
+        {
+            return false;
+        }
+
+        return employees.Remove(employeeToRemove);
+    }
+
     public GetEmployeeDto? GetEmployee(int id)
     {
         return employees.First(x => x.Id == id);
@@ -82,5 +113,37 @@ public class MockEmployeeProvider : IEmployeeProvider
     public List<GetEmployeeDto> GetEmployees()
     {
         return employees;
+    }
+
+    public GetEmployeeDto? UpdateEmployee(Employee employee)
+    {
+        GetEmployeeDto? employeeToUpdate = GetEmployee(employee.Id);
+        if (employeeToUpdate == null)
+        {
+            return null;
+        }
+        // these mappings could be moved to a constructor
+        if (employee.FirstName != null && employee.FirstName != employeeToUpdate.FirstName)
+        {
+            employeeToUpdate.FirstName = employee.FirstName;
+        }
+        if (employee.LastName != null && employee.LastName != employeeToUpdate.LastName)
+        {
+            employeeToUpdate.LastName = employee.LastName;
+        }
+        if (employee.Salary != employeeToUpdate.Salary)
+        {
+            employeeToUpdate.Salary = employee.Salary;
+        }
+        if (employee.DateOfBirth != employeeToUpdate.DateOfBirth)
+        {
+            employeeToUpdate.DateOfBirth = employee.DateOfBirth;
+        }
+        if (employee.ProfileUrl != employeeToUpdate.ProfileUrl)
+        {
+            employeeToUpdate.ProfileUrl = employee.ProfileUrl;
+        }
+
+        return GetEmployee(employee.Id);
     }
 }

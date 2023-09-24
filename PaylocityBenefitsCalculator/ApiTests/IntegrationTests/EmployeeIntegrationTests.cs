@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Api.Dtos.Dependent;
 using Api.Dtos.Employee;
@@ -107,13 +111,47 @@ public class EmployeeIntegrationTests : IntegrationTest
         };
         await response.ShouldReturn(HttpStatusCode.OK, employee);
     }
-    
+
     [Fact]
     //task: make test pass
     //resolution: when the requested id does not return an employee the api returns NotFound();
     public async Task WhenAskedForANonexistentEmployee_ShouldReturn404()
     {
         var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}");
+        await response.ShouldReturn(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task WhenUpdatingAnEmployee_ShouldReturnUpdatedEmployee()
+    {
+        Employee employee = new Employee() { Id = 1, FirstName = "new-name" };
+        HttpContent httpContent = new StringContent(JsonSerializer.Serialize(employee), Encoding.UTF8, "application/json");
+        var response = await HttpClient.PatchAsync($"/api/v1/employees/", httpContent);
+        GetEmployeeDto responseData = new GetEmployeeDto
+        {
+            Id = 1,
+            FirstName = "new-name",
+            LastName = "James",
+            Salary = 75420.99m,
+            DateOfBirth = new DateTime(1984, 12, 30),
+            ProfileUrl = "https://cdn.nba.com/headshots/nba/latest/1040x760/2544.png"
+        };
+        await response.ShouldReturn(HttpStatusCode.OK, responseData);
+    }
+
+    [Fact]
+    public async Task WhenDeletingAnExistingEmployee_ShouldReturnTrue()
+    {
+        var response = await HttpClient.DeleteAsync($"/api/v1/employees/1");
+       
+        await response.ShouldReturn(HttpStatusCode.OK, true);
+    }
+
+    [Fact]
+    public async Task WhenDeletingInvalidEmployee_ShouldReturnNotFound()
+    {
+        var response = await HttpClient.DeleteAsync($"/api/v1/employees/{int.MinValue}");
+       
         await response.ShouldReturn(HttpStatusCode.NotFound);
     }
 }
